@@ -1,2 +1,5 @@
 # deps
-node_modules/
+node_modules
+.env
+dist
+.DS_Store
