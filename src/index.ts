@@ -37,6 +37,21 @@ app.get("/reset", (c) => {
   return c.json({ state });
 });
 
+app.get("/crash", (c) => {
+  process.exit(1);
+});
+
+function stressCpu() {
+  while (true) {
+    Math.sqrt(Math.random());
+  }
+}
+
+app.get("/stress", (c) => {
+  stressCpu();
+  return c.text("running stress");
+});
+
 export default {
   fetch: app.fetch,
   port: 8080,
