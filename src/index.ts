@@ -37,4 +37,7 @@ app.get("/reset", (c) => {
   return c.json({ result });
 });
 
-export default app;
+export default {
+  fetch: app.fetch,
+  port: 8080,
+};
