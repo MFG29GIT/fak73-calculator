@@ -3,7 +3,7 @@ import { Client } from "pg";
 
 const app = new Hono();
 
-// 🔌 Datenbankverbindung initialisieren
+// 🔌 Datenbankverbindung initialisiere
 async function initDatabase() {
   const client = new Client({
     connectionString: process.env.DATABASE_URL,
