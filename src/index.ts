@@ -13,21 +13,6 @@ async function initDatabase() {
   await client.connect();
   console.log("✅ Verbunden mit PostgreSQL");
 
-  // Stelle sicher, dass die `calculator_state`-Tabelle existiert
-  // await client.query(`
-  //   CREATE TABLE IF NOT EXISTS calculator_state (
-  //     id SERIAL PRIMARY KEY,
-  //     value INTEGER NOT NULL DEFAULT 0
-  //   );
-  // `);
-
-  // Falls kein Eintrag existiert, initialisieren
-  // await client.query(`
-  //   INSERT INTO calculator_state (value)
-  //   SELECT 0
-  //   WHERE NOT EXISTS (SELECT 1 FROM calculator_state);
-  // `);
-
   return client;
 }
 
@@ -41,9 +26,9 @@ initDatabase().then((client) => {
 app.get("/state", async (c) => {
   if (!dbClient) return c.text("DB noch nicht verbunden", 500);
   const result = await dbClient.query(
-    "SELECT value FROM calculator_state LIMIT 1"
+    "SELECT state FROM calculator_state LIMIT 1"
   );
-  return c.json({ state: result.rows[0].value });
+  return c.json({ state: result.rows[0].state });
 });
 
 // ➕ Zwei Zahlen addieren (ohne DB-Speicherung)
@@ -66,15 +51,15 @@ app.get("/add", async (c) => {
   }
 
   const result = await dbClient.query(
-    "UPDATE calculator_state SET value = value + $1 RETURNING value",
+    "UPDATE calculator_state SET state = state + $1 RETURNING state",
     [y]
   );
-  return c.json({ state: result.rows[0].value });
+  return c.json({ state: result.rows[0].state });
 });
 
 // 🔄 `state` auf 0 setzen
 app.get("/reset", async (c) => {
-  await dbClient.query("UPDATE calculator_state SET value = 0");
+  await dbClient.query("UPDATE calculator_state SET state = 0");
   return c.json({ state: 0 });
 });
 
