@@ -18,7 +18,7 @@ app.get("/stateless-add", (c) => {
     return c.text("invalid y");
   }
 
-  const state = x + y;
+  state = x + y;
   return c.json({ state });
 });
 
@@ -28,13 +28,13 @@ app.get("/add", (c) => {
     return c.text("invalid y");
   }
 
-  const state = y + 2;
+  state += y;
   return c.json({ state });
 });
 
 app.get("/reset", (c) => {
-  const result = 0;
-  return c.json({ result });
+  state = 0;
+  return c.json({ state });
 });
 
 export default {
